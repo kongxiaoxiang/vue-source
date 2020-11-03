@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="test">
+    atguigu教育
+  </div>
+  <ul id='fragment_test'>
+    <li>test1</li>
+    <li>test2</li>
+    <li>test3</li>
+  </ul>
+  <script>
+    //1.将伪数组转化为真数组 Array.prototype.slice.call()
+    const lis = document.getElementsByTagName('li')
+    console.log(lis instanceof Array,lis[1].innerHTML,lis.forEach)
+    const lis2 = Array.prototype.slice.call(lis)
+    console.log(lis2 instanceof Array,lis2[1].innerHTML,lis2.forEach)
+
+    //2.得到节点的类型 nodeType
+    const elementNode = document.getElementById('test')
+    const attrNode = elementNode.getAttributeNode('id')
+    const textNode = elementNode.firstChild
+    console.log(elementNode.nodeType,attrNode.nodeType,textNode.nodeType)
+
+    //3.Object.defineProperty(obj,prop,{}) 给指定的对象添加属性(指定描述符)
+    obj = {
+      firstName:'A',
+      lastName:'B'
+    }
+    Object.defineProperty(obj,'fullName',{
+      get(){
+        return this.firstName + '-' + this.lastName
+      },
+      set(value){
+        const names = value.split('-')
+        this.firstName = names[0]
+        this.lastName = names[1]
+      }
+    })
+    console.log(obj.fullName)
+    obj.firstName = 'C'
+    obj.lastName = 'D'
+    console.log(obj.fullName)
+    obj.fullName = 'E-F'
+    console.log(obj.firstName,obj.lastName)
+
+    //4.Object.keys(obj) 得到对象自身可枚举的属性组成数组
+    const names = Object.keys(obj)
+    console.log(names)
+
+    //5.obj.hasOwnProperty(prop) 判断prop是否为对象自身的属性
+    console.log(obj.hasOwnProperty('fullName'),obj.hasOwnProperty('toString'))
+
+    //6.doumentfragment 高效批量处理多个节点  内存中保存n个element的容器对象(不与界面关联)
+      const ul = document.getElementById('fragment_test')
+      //1.创建fragment
+      const fragment = document.createDocumentFragment()
+      //2.将ul中的所有子节点取出保存到fragment
+      let child 
+      while (child = ul.firstChild) { //一个节点只能有一个父亲
+        fragment.appendChild(child) //先将child从ul中移除，再添加到fragment中
+      }
+      //3.更新fragment中的元素节点的文本内容
+      Array.prototype.slice.call(fragment.childNodes).forEach(node =>{
+        if(node.nodeType ===1){
+          node.innerHTML = 'atguigu'
+        }
+      })
+      //4.将fragment插入到ul中
+      ul.appendChild(fragment)
+  </script>
+</body>
+</html>
